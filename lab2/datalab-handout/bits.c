@@ -143,8 +143,8 @@ NOTES:
  *   Rating: 1
  */
 int bitXor(int x, int y) {
-  x^y=~(~(~x&y)&~(x&~y));
-  return x^y;
+  int z=(~(~(~x&y)&~(x&~y)));
+  return z;
 }
 /* 
  * tmin - return minimum two's complement integer 
@@ -178,7 +178,7 @@ int isTmax(int x) {
  */
 int allOddBits(int x) {
   int m=(0xAA<<8)+0xAA;
-  m=m<<16+m;//凑一个10101010101010101010101010101010（？？
+  m=(m<<16)+m;//凑一个10101010101010101010101010101010（？？
   return !(m^(x&m));
 }
 /* 
@@ -189,8 +189,8 @@ int allOddBits(int x) {
  *   Rating: 2
  */
 int negate(int x) {
-  -x=~x+0x01;
-  return -x;
+  x=(~x)+0x01;
+  return x;
 }
 //3
 /* 
@@ -227,7 +227,7 @@ int conditional(int x, int y, int z) {
 int isLessOrEqual(int x, int y) {
   int t=(y+~x+0x01)>>31;//y-x的符号
   int s=(x>>31)^(y>>31);//判断是否异号
-  return (!t&!s)|!!(s&(x>>31))
+  return (!t&!s)|!!(s&(x>>31));
 }
 //4
 /* 
@@ -257,12 +257,18 @@ int howManyBits(int x) {
   //正数及其相反数的位相同
   int s=x>>31;//-1时是负数，0是正数或0 补码11或00
   x=(s&~x)|(~s&x);//负数改正数
-  int m16=(~(!!(x>>16))+0x01)&0x10;
-  int m8=(~(!!(x>>(m16+0x08)))+0x01)&0x08;
-  int m4=(~(!!(x>>(m16+m8+0x04)))+0x01)&0x04;
-  int m2=(~(!!(x>>(m16+m8+m4+0x02)))+0x01)&0x02;
-  int m1=(~(!!(x>>(m16+m8+m4+m2+0x01)))+0x01)&0x01;
-  int m0=(~(!!(x>>(m16+m8+m4+m2)))+0x01)&0x01;
+  int a=!!(x>>16);
+  int m16=(~a+0x01)&0x10;
+  a=!!(x>>(m16+0x08));
+  int m8=(~a+0x01)&0x08;
+  a=!!(x>>(m16+m8+0x04));
+  int m4=(~a+0x01)&0x04;
+  a=!!(x>>(m16+m8+m4+0x02));
+  int m2=(~a+0x01)&0x02;
+  a=!!(x>>(m16+m8+m4+m2+0x01));
+  int m1=(~a+0x01)&0x01;
+  a=!!(x>>(m16+m8+m4+m2));
+  int m0=(~a+0x01)&0x01;
   return m16+m8+m4+m2+m1+m0+1;
 }
 //float
@@ -345,4 +351,3 @@ unsigned floatPower2(int x) {
         return INF;
     return e << 23;
 }
-
