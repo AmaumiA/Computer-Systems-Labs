@@ -345,3 +345,4 @@ unsigned floatPower2(int x) {
         return INF;
     return e << 23;
 }
+
